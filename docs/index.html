@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>API Produto - Swagger</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
+</head>
+<body>
+
+<div id="swagger-ui"></div>
+
+<script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+
+<script>
+const spec = {
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Primeiro PHP",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "\/produto\/listar": {
+            "get": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Lista todos os produtos",
+                "operationId": "listarProdutos",
+                "responses": {
+                    "200": {
+                        "description": "Produtos encontrados",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#\/components\/schemas\/Produto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/produto\/obter\/{idProduto}": {
+            "get": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Obtém um produto pelo ID",
+                "operationId": "obterProduto",
+                "parameters": [
+                    {
+                        "name": "idProduto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto encontrado",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Produto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produto não encontrado",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/produto\/gravar": {
+            "post": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Cria um produto",
+                "operationId": "criarProduto",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ProdutoInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produto criado com sucesso",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/produto\/alterar": {
+            "put": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Altera um produto",
+                "operationId": "alterarProduto",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ProdutoAlterar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produto alterado com sucesso",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/produto\/excluir\/{idProduto}": {
+            "delete": {
+                "tags": [
+                    "Produto"
+                ],
+                "summary": "Exclui um produto",
+                "operationId": "excluirProduto",
+                "parameters": [
+                    {
+                        "name": "idProduto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto excluído com sucesso",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produto não encontrado",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Mensagem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Produto": {
+                "type": "object",
+                "properties": {
+                    "idProduto": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nomeProduto": {
+                        "type": "string",
+                        "example": "Café"
+                    },
+                    "valorProduto": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 10.5
+                    },
+                    "idCategoria": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "ProdutoInput": {
+                "type": "object",
+                "required": [
+                    "nomeProduto",
+                    "valorProduto",
+                    "idCategoria"
+                ],
+                "properties": {
+                    "nomeProduto": {
+                        "type": "string",
+                        "example": "Café"
+                    },
+                    "valorProduto": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 10.5
+                    },
+                    "idCategoria": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "ProdutoAlterar": {
+                "type": "object",
+                "required": [
+                    "idProduto",
+                    "nomeProduto",
+                    "valorProduto",
+                    "idCategoria"
+                ],
+                "properties": {
+                    "idProduto": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nomeProduto": {
+                        "type": "string",
+                        "example": "Café Especial"
+                    },
+                    "valorProduto": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15
+                    },
+                    "idCategoria": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "Mensagem": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Operação realizada com sucesso"
+                    }
+                }
+            }
+        }
+    }
+};
+
+window.onload = function () {
+    SwaggerUIBundle({
+        spec: spec,
+        dom_id: '#swagger-ui',
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: 'BaseLayout',
+        deepLinking: true
+    });
+};
+</script>
+
+</body>
+</html>

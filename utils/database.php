@@ -11,9 +11,9 @@ class Database
 
         $host = "127.0.0.1";
         $port = 3306;
-        $database = "primeirophp";
+        $database = "php";
         $user = "root";
-        $password = "ametis99";
+        $password = "root";
 
 
         $this->conexao = new PDO(
