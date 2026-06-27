@@ -1,10 +1,10 @@
-# Reescreve todas as requisições para o index.php (Front Controller)
+# Redireciona todas as requisições para o index.php (Front Controller)
 Options -MultiViews
 RewriteEngine On
 
-# Não redireciona arquivos e pastas que existem fisicamente
+# Não redireciona arquivos físicos (ex: vendor, public)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Redireciona tudo para o index.php
+# Tudo passa pelo index.php
 RewriteRule ^(.*)$ index.php [QSA,L]

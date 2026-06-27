@@ -1,5 +1,6 @@
 <?php
 
+
 require_once __DIR__ . '/../model/produtoModel.php';
 
 class ProdutoController

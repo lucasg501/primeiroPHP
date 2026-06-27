@@ -27,7 +27,6 @@ class Database
             PDO::ATTR_ERRMODE,
             PDO::ERRMODE_EXCEPTION
         );
-
     }
 
 
@@ -42,7 +41,6 @@ class Database
     {
 
         return $this->conexao->beginTransaction();
-
     }
 
 
@@ -51,7 +49,6 @@ class Database
     {
 
         return $this->conexao->rollBack();
-
     }
 
 
@@ -60,7 +57,6 @@ class Database
     {
 
         return $this->conexao->commit();
-
     }
 
 
@@ -75,22 +71,15 @@ class Database
 
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
 
 
     public function executarComandoNonQuery($sql, $valores = [])
     {
-
         $stmt = $this->conexao->prepare($sql);
 
-
-        $stmt->execute($valores);
-
-
-        return $stmt->rowCount() > 0;
-
+        return $stmt->execute($valores);
     }
 
 
@@ -105,7 +94,5 @@ class Database
 
 
         return $this->conexao->lastInsertId();
-
     }
-
 }

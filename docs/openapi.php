@@ -1,13 +1,15 @@
 <?php
 
+namespace Docs;
+
 use OpenApi\Attributes as OA;
 
-
 #[OA\Info(
-    title: "API Primeiro PHP",
-    version: "1.0.0"
+    title: "Minha API",
+    version: "1.0.0",
+    description: "Documentação da API"
 )]
-class OpenApiInfo
+class OpenApi
 {
 
 }

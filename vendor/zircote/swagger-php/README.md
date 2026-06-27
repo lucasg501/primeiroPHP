@@ -4,36 +4,33 @@
 
 # swagger-php
 
-Generate interactive [OpenAPI](https://www.openapis.org) documentation for your RESTful API
-using [PHP attributes](https://www.php.net/manual/en/language.attributes.overview.php) (preferred) or
-[doctrine annotations](https://www.doctrine-project.org/projects/annotations.html) (requires additional
-`doctrine/annotations` library).
+Generate interactive [OpenAPI](https://www.openapis.org) documentation for your RESTful API using [PHP attributes](https://www.php.net/manual/en/language.attributes.overview.php) (preferred) or 
+[doctrine annotations](https://www.doctrine-project.org/projects/annotations.html) (requires additional `doctrine/annotations` library).
 
-See the [documentation website](https://zircote.github.io/swagger-php/guide/using-attributes.html) for supported
-attributes and annotations.
+See the [documentation website](https://zircote.github.io/swagger-php/guide/attributes.html) for supported attributes and annotations.
 
-**Annotations are deprecated and may be removed in a future release of swagger-php.**
+Annotations are deprecated and may be removed in a future release of swagger-php.
 
 ## Features
 
-- Compatible with the OpenAPI **3.0**, **3.1** and **3.2** specification.
-- Extracts information from code and existing phpdoc comments.
-- Can be used programmatically or via command-line tool.
+- Compatible with the OpenAPI **3.0** and **3.1** specification.
+- Extracts information from code & existing phpdoc annotations.
+- Command-line interface available.
 - [Documentation site](https://zircote.github.io/swagger-php/) with a getting started guide.
-- Error reporting (with hints, context).
-- All metadata is configured via PHP attributes.
+- Exceptional error reporting (with hints, context)
+- As of PHP 8.1 all annotations are also available as PHP attributes
 
 ## OpenAPI version support
 
-`swagger-php` allows to generate specs either for **OpenAPI 3.0.0**, **OpenAPI 3.1.0** and **OpenAPI 3.2.0**.
-By default, the spec will be in version `3.0.0`. The command line option `--version` may be used to change to
-any other supported version.
+`swagger-php` allows to generate specs either for **OpenAPI 3.0.0** or **OpenAPI 3.1.0**.
+By default the spec will be in version `3.0.0`. The command line option `--version` may be used to change this
+to `3.1.0`.
 
 Programmatically, the method `Generator::setVersion()` can be used to change the version.
 
 ## Requirements
 
-`swagger-php` requires at least **PHP 8.2**.
+`swagger-php` requires at least PHP 7.2 for annotations and PHP 8.1 for using attributes.
 
 ## Installation (with [Composer](https://getcomposer.org))
 
@@ -41,62 +38,58 @@ Programmatically, the method `Generator::setVersion()` can be used to change the
 composer require zircote/swagger-php
 ```
 
-For cli usage from anywhere, install swagger-php globally and make sure to place the `~/.composer/vendor/bin` directory
-in your PATH so the `openapi` executable can be located by your system.
+For cli usage from anywhere install swagger-php globally and make sure to place the `~/.composer/vendor/bin` directory in your PATH so the `openapi` executable can be located by your system.
 
 ```shell
 composer global require zircote/swagger-php
 ```
 
 ### doctrine/annotations
+As of version `4.8` the [doctrine annotations](https://www.doctrine-project.org/projects/annotations.html) library **is optional** and **no longer installed by default**.
 
-As of version `4.8` the [doctrine annotations](https://www.doctrine-project.org/projects/annotations.html) library **is
-optional** and **no longer installed by default**.
+To use PHPDoc annotations this needs to be installed on top of `swagger-php`:
+```shell
+composer require doctrine/annotations
+```
 
-If your code uses doctrine annotations you will need to install that library manually:
+If your code uses PHPDoc annotations you will need to install this as well:
 
 ```shell
 composer require doctrine/annotations
 ```
 
+
 ## Usage
 
-Use OpenAPI attributes to add metadata to your classes, methods and other structural PHP elements.
+Add annotations to your php files.
 
 ```php
+/**
+ * @OA\Info(title="My First API", version="0.1")
+ */
 
-use OpenApi\Attributes as OAT;
-
-#[OAT\Info(title: 'My First API', version: '0.1')]
-class MyApi
-{
-    #[OAT\Get(path: '/api/resource.json')]
-    #[OAT\Response(response: '200', description: 'An example resource')]
-    public function getResource()
-    {
-        // ...
-    }
-}
+/**
+ * @OA\Get(
+ *     path="/api/resource.json",
+ *     @OA\Response(response="200", description="An example resource")
+ * )
+ */
 ```
 
-Visit the [Documentation website](https://zircote.github.io/swagger-php/) for
-the [Getting started guide](https://zircote.github.io/swagger-php/guide) or look at
-the [examples directory](docs/examples) for more examples.
+Visit the [Documentation website](https://zircote.github.io/swagger-php/) for the [Getting started guide](https://zircote.github.io/swagger-php/guide) or look at the [Examples directory](Examples/) for more examples.
 
-### Usage from PHP
+### Usage from php
 
 Generate always-up-to-date documentation.
 
 ```php
 <?php
 require("vendor/autoload.php");
-$openapi = (new \OpenApi\Generator())->generate(['/path/to/project']);
+$openapi = \OpenApi\Generator::scan(['/path/to/project']);
 header('Content-Type: application/x-yaml');
 echo $openapi->toYaml();
 ```
-
-Documentation of how to use the `Generator` class can be found in
-the [Generator reference](https://zircote.github.io/swagger-php/reference/generator).
+Documentation of how to use the `Generator` class can be found in the [Generator reference](https://zircote.github.io/swagger-php/reference/generator).
 
 ### Usage from the Command Line Interface
 
@@ -105,41 +98,23 @@ The `openapi` command line interface can be used to generate the documentation t
 ```shell
 ./vendor/bin/openapi --help
 ```
+Starting with version 4 the default analyser used on the command line is the new `ReflectionAnalyser`.
 
-## Automatic type resolution
+Using the `--legacy` flag (`-l`) the legacy `TokenAnalyser` can still be used.
 
-As of version 6, resolving of types is done using the `TypeInfoTypeResolver` class. It uses the `symfony/type-info`
-library under the hood which allows handling of complext types.
+### Usage from the Deserializer
 
-With this change, `swagger-php` supports all available native type-hints and also complext generic type-hints via phpdoc
-blocks.
-This simplifies the definition of schemas.
-
-For example, the following two examples are now equivalent:
+Generate the OpenApi annotation object from a json string, which makes it easier to manipulate objects programmatically.
 
 ```php
-class MyClass
-{
-    #[OAT\Property(items: new OAT\Items(oneOf: [
-        new OAT\Schema(type: SchemaOne::class),
-        new OAT\Schema(type: SchemaTwo::class),
-    ]))]
-    public array $values;
-}
-```
+<?php
 
-```php
-class MyClass
-{
-    /**
-     * @var list<SchemaOne|SchemaTwo>
-     */
-    public array $values;
-}
-```
+use OpenApi\Serializer;
 
-If this is not desired, the `LegacyTypeResolver` can be used to preserve the old behaviour of version 5.
-The `LegacyTypeResolver` is deprecated and will be removed in a future release.
+$serializer = new Serializer();
+$openapi = $serializer->deserialize($jsonString, 'OpenApi\Annotations\OpenApi');
+echo $openapi->toJson();
+```
 
 ## [Contributing](CONTRIBUTING.md)
 
