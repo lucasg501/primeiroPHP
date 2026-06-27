@@ -65,6 +65,10 @@ switch ($recurso) {
         require_once __DIR__ . '/route/categoriaRoute.php';
         break;
 
+    case 'clientes':
+        require_once __DIR__ . '/route/clientesRoute.php';
+        break;    
+
     // ── Fallback ───────────────────────────────────────────────────────────
     default:
         http_response_code(404);
