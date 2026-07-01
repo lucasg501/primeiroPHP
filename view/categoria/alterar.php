@@ -31,7 +31,11 @@
 
 </div>
 
-<script src="../assets/js/api.js"></script>
+<script src="../assets/js/api/httpClient.js"></script>
+<script src="../assets/js/api/categoriaApi.js"></script>
+<script src="../assets/js/utils/helpers.js"></script>
+<script src="../assets/js/utils/toast.js"></script>
+
 <script>
   const params = new URLSearchParams(window.location.search);
   const idCategoria = parseInt(params.get('id'), 10);

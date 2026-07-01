@@ -34,16 +34,20 @@
       </span>
     </a>
 
-    <div class="resource-card resource-card--disabled">
+    <a href="produto/listar.php" class="resource-card resource-card--active">
       <div class="resource-card__top">
         <span class="resource-card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m20.5 7.3-8.5 5-8.5-5M12 12.3V21M3.5 7.3v9.4L12 21l8.5-4.3V7.3L12 3z"/></svg>
         </span>
-        <span class="resource-card__badge resource-card__badge--soon">Em breve</span>
+        <span class="resource-card__badge resource-card__badge--live">Disponível</span>
       </div>
       <h2 class="resource-card__title">Produtos</h2>
       <p class="resource-card__text">Cadastro de produtos vinculados às categorias — telas ainda em construção.</p>
-    </div>
+      <span class="resource-card__cta">
+        Acessar produtos
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
 
     <div class="resource-card resource-card--disabled">
       <div class="resource-card__top">

@@ -12,6 +12,12 @@
 
   <span class="eyebrow"><span class="eyebrow__dot"></span>Catálogo · 01</span>
 
+  <a href="/view/index.php">
+    <h1 class="page-title">
+      <button class="btn btn-primary">Página Inicial</button>
+    </h1>
+  </a>
+
   <div class="page-header">
     <div>
       <h1 class="page-title">Categorias</h1>
@@ -56,7 +62,11 @@
   </div>
 </div>
 
-<script src="../assets/js/api.js"></script>
+<script src="../assets/js/api/httpClient.js"></script>
+<script src="../assets/js/api/categoriaApi.js"></script>
+<script src="../assets/js/utils/helpers.js"></script>
+<script src="../assets/js/utils/toast.js"></script>
+
 <script>
   const corpoTabela = document.getElementById('corpoTabela');
   const modalExcluir = document.getElementById('modalExcluir');

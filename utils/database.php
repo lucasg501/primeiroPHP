@@ -13,7 +13,7 @@ class Database
         $port = 3306;
         $database = "php";
         $user = "root";
-        $password = "root";
+        $password = "ametis99";
 
 
         $this->conexao = new PDO(
