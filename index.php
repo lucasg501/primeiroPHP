@@ -1,5 +1,19 @@
 <?php
 
+// ─── ROUTER SCRIPT (servidor embutido do PHP) ──────────────────────────────
+// Quando rodado como `php -S localhost:4000 index.php`, este bloco deixa o
+// próprio servidor servir arquivos que já existem em disco (ex.: tudo que
+// está em /view e /public), e só passa para o roteamento de API abaixo
+// quando a URL não corresponde a nenhum arquivo real.
+if (php_sapi_name() === 'cli-server') {
+    $caminhoSolicitado = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $caminhoArquivo    = __DIR__ . $caminhoSolicitado;
+
+    if ($caminhoSolicitado !== '/' && is_file($caminhoArquivo)) {
+        return false; // deixa o PHP servir o arquivo (html/css/js/php) diretamente
+    }
+}
+
 // ─── CORS ─────────────────────────────────────────────────────────────────
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
